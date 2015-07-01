@@ -403,6 +403,8 @@ var resizePizzas = function(size) {
   window.performance.mark("mark_start_resize");   // User Timing API function
 
   // Changes the value for the size of the pizza above the slider
+  // as well as giving the pizzas a percentage for the new size to be
+  // based on the div width
   function changeSliderLabel(size) {
     switch(size) {
       case "1":
@@ -422,6 +424,9 @@ var resizePizzas = function(size) {
   changeSliderLabel(size);
 
   // Iterates through pizza elements on the page and changes their widths
+  // DetimineDx function was removed as it was an obsolete function that
+  // pretty much did nothing and was replaced with simply adjusting the
+  // pizza widths by a percentage
   function changePizzaSizes(size) {
     var pizzaContains = document.querySelectorAll(".randomPizzaContainer");
     for (var i = 0; i < pizzaContains.length; i++) {
@@ -477,11 +482,16 @@ function updatePositions() {
   var items = document.querySelectorAll('.mover');
 
   // calculates a sin wave for the pizzas to move
-  var phase = Math.sin((document.body.scrollTop / 1250));
+  // Phase was removed from initial for loop due to forced synchronous layout
+  // Phases for all pizzas and now calculated before the style loop is run
+  var phase = [];
+  for (i = 0; i < items.length; i ++) {
+    phase[i] = Math.sin((document.body.scrollTop / 1250) + (i % 5));
+  }
 
   // Moves the pizzas in the background.
   for (var i = 0; i < items.length; i++) {
-    items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
+    items[i].style.left = items[i].basicLeft + 100 * phase[i] + 'px';
   }
 
   // User Timing API to the rescue again. Seriously, it's worth learning.
@@ -497,8 +507,17 @@ function updatePositions() {
 // runs updatePositions on scroll
 window.addEventListener('scroll', updatePositions);
 
+// Checks to see how wide the window is for how many pizzas needed
+window.addEventListener('resize', function() {
+  var intFrameWidth = window.innerWidth;
+  console.log(intFrameWidth);
+});
+
 // Generates the sliding pizzas when the page loads.
 document.addEventListener('DOMContentLoaded', function() {
+  // Checks initial number of pizzas needed based on width of window
+  var intFrameWidth = window.innerWidth;
+  console.log(intFrameWidth);
   var cols = 8;
   var s = 256;
   for (var i = 0; i < 200; i++) {
