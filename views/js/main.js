@@ -507,28 +507,68 @@ function updatePositions() {
 // runs updatePositions on scroll
 window.addEventListener('scroll', updatePositions);
 
-// Checks to see how wide the window is for how many pizzas needed
+// Generates number of pizzas to display in background is window height is ajusted
 window.addEventListener('resize', function() {
-  var intFrameWidth = window.innerWidth;
-  console.log(intFrameWidth);
+  var items = document.querySelectorAll('.mover');
+  var windowHeight = window.innerHeight;
+  if (windowHeight <= 150) {
+    var loops = 8;
+    resizerSteps(loops);
+  } else if (windowHeight <= 600) {
+    var loops = 24;
+    resizerSteps(loops);
+  } else if (windowHeight > 600 && 600 <= 1080) {
+    var loops = 48;
+    resizerSteps(loops);
+  } else {
+    var loops = 100;
+    resizerSteps(loops);
+  }
 });
 
 // Generates the sliding pizzas when the page loads.
 document.addEventListener('DOMContentLoaded', function() {
-  // Checks initial number of pizzas needed based on width of window
-  var intFrameWidth = window.innerWidth;
-  console.log(intFrameWidth);
-  var cols = 8;
-  var s = 256;
-  for (var i = 0; i < 200; i++) {
+  // Generate number of pizza images in the background depending on
+  // height of the window at dom load
+  var windowHeight = window.innerHeight;
+  if (windowHeight <= 150) {
+    var loops = 8;
+  } else if (windowHeight <= 600) {
+    var loops = 24;
+  } else if (windowHeight > 600 && 600 <= 1080) {
+    var loops = 48;
+  } else {
+    var loops = 100;
+  }
+  createPizza(loops);
+  updatePositions();
+});
+
+// Function to make pizzas
+var createPizza = function(loops) {
+  for (var i = 0; i < loops; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
     elem.style.height = "100px";
     elem.style.width = "73.333px";
-    elem.basicLeft = (i % cols) * s;
-    elem.style.top = (Math.floor(i / cols) * s) + 'px';
-    document.querySelector("#movingPizzas1").appendChild(elem);
+    elem.basicLeft = (i % 8) * 256;
+    elem.style.top = (Math.floor(i / 8) * 256) + 'px';
+    document.getElementById("movingPizzas1").appendChild(elem);
   }
+}
+
+// Removes the pizzas when resizing the window height so they can be remade again
+var removePizzas = function() {
+  var myNode = document.getElementById("movingPizzas1");
+  while (myNode.firstChild) {
+    myNode.removeChild(myNode.firstChild);
+  }
+}
+
+// Simplifies the steps in resize window function.
+var resizerSteps = function(loops) {
+  removePizzas();
+  createPizza(loops);
   updatePositions();
-});
+}
