@@ -526,8 +526,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Function to make pizzas
 var createPizza = function(loops) {
+  var elem;
   for (var i = 0; i < loops; i++) {
-    var elem = document.createElement('img');
+    elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
     elem.style.height = "100px";
