@@ -63,3 +63,22 @@ Feeling uninspired by the portfolio? Here's a list of cool portfolios I found af
 * <a href="http://nicoledominguez.com/portfolio/">http://nicoledominguez.com/portfolio/</a>
 * <a href="http://www.roxannecook.com/">http://www.roxannecook.com/</a>
 * <a href="http://www.84colors.com/portfolio.html">http://www.84colors.com/portfolio.html</a>
+
+### How to run the page
+
+Open the page in Google Chrome or preferred browser and navigate the sites.
+
+### Optimizations made for index.html
+
+* Added an internal style sheet for index.html
+* Made all scripts asynchronous in html as the google analytics script was making the page load very slowly.
+* Made all images as small as possible, as close to the size being displayed on the page as possible
+* Applied file optimizations for all the images
+
+### Optimizations made for pizza.html
+
+* Added will-change: transform; to class .mover to make each pizza in the background an individual layer and found speed
+  increase of approximately 0.2 ms
+* Removed calculation of phase from for loop which removed forced synchronous layout
+* Removed function determineDx and replaced with percentages for pizza size changes, also removes the issue with forced
+  synchronous layout for pizza size changes
