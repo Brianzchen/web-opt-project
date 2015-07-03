@@ -428,8 +428,8 @@ var resizePizzas = function(size) {
   // pretty much did nothing and was replaced with simply adjusting the
   // pizza widths by a percentage
   function changePizzaSizes(size) {
-    var pizzaContains = document.querySelectorAll(".randomPizzaContainer");
-    for (var i = 0; i < pizzaContains.length; i++) {
+    var pizzaContains = document.getElementsByClassName("randomPizzaContainer");
+    for (var i = 0, len = pizzaContains.length; i < len; i++) {
       pizzaContains[i].style.width = newWidth + "%";
     }
   }
@@ -445,9 +445,9 @@ var resizePizzas = function(size) {
 
 window.performance.mark("mark_start_generating"); // collect timing data
 
+var pizzasDiv = document.getElementById("randomPizzas");
 // This for-loop actually creates and appends all of the pizzas when the page loads
 for (var i = 2; i < 100; i++) {
-  var pizzasDiv = document.getElementById("randomPizzas");
   pizzasDiv.appendChild(pizzaElementGenerator(i));
 }
 
@@ -479,19 +479,18 @@ function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
 
-  var items = document.querySelectorAll('.mover');
+  var items = document.getElementsByClassName("mover");
 
   // calculates a sin wave for the pizzas to move
   // Phase was removed from initial for loop due to forced synchronous layout
   // Phases for all pizzas and now calculated before the style loop is run
-  var phase = [];
-  for (i = 0; i < items.length; i ++) {
-    phase[i] = Math.sin((document.body.scrollTop / 1250) + (i % 5));
-  }
+  var scrollTop = document.body.scrollTop / 1250;
+  var phase;
 
   // Moves the pizzas in the background.
-  for (var i = 0; i < items.length; i++) {
-    items[i].style.left = items[i].basicLeft + 100 * phase[i] + 'px';
+  for (var i = 0, len = items.length; i < len; i++) {
+    phase = Math.sin(scrollTop + (i % 5)) * 100;
+    items[i].style.left = items[i].basicLeft + phase + 'px';
   }
 
   // User Timing API to the rescue again. Seriously, it's worth learning.
